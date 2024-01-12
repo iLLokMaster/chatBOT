@@ -45,5 +45,6 @@ while True:
         con.commit()
         cur.close()
         exit()
+    print(prompt)
     recp(prompt)
 
