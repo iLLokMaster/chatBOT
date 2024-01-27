@@ -1,50 +1,63 @@
 import re
-import sqlite3 as sql
-con = sql.connect('bod.db')
-cur = con.cursor()
-cur.execute("CREATE TABLE IF NOT EXISTS `BOD` (`question` STRING, `answer` STRING)")
-def SAL_ALL():
-    cur.execute("SELECT * FROM BOD")
-    return cur.fetchall()
-def L_F_SQL(q_p):
-    if q_p == 1:
-        q = 'answer'
-    else:
-        q = 'question'
-    ques = con.execute(f'SELECT * FROM bod WHERE question ={q}').fetchone()
-    return ques
-def per_com(list1, list2):
+import sqlite3
+DataBaseSQL3inCode = sqlite3.connect("DataBaseInFiles")
+    ###create cursor
+cursor = DataBaseSQL3inCode.cursor()
+    ###create table
+    ###perform only for the first time
+# cursor.execute("""CREATE TABLE AnsvQest (
+#     answer text,
+#     qestion text
+# )""")
+#cursor.execute("INSERT INTO AnsvQest VALUES ('привет', 'Привет, как у тебя дела?')")
+    ###select all from Data Base and insert to db
+db = cursor.execute("SELECT * FROM AnsvQest").fetchall()
+    ###commit changes and cloce Data Base
+DataBaseSQL3inCode.commit()
+#DataBaseSQL3inCode.close()
+    ###body of programm
+def per_com(list1, list2): #calculation of the percentage of coincidence of the question from the database and the user's question
     common_elements = set(list1) & set(list2)
     percent_match = (len(common_elements) / len(set(list1 + list2))) * 100
     return percent_match
+
 def recp(prompt):
     pers = []
     pr = prompt
     pr = pr.lower()
     pr = re.sub('\W+',' ', pr )
-    for k in range(len(SAL_ALL())):
+
+    for k in range(len(db)):
         list_a = pr
-        list_b = re.sub('\W+',' ', L_F_SQL(0)[k])
-        print(list_b)
+        list_b = re.sub('\W+',' ', db[k][0] )
         result = per_com(list_a, list_b)
-        pers.append([result, L_F_SQL(1)[k]])
+        pers.append([result, db[k][1]])
     sortPers = sorted(pers)
+
+    #result = проценты совпадения
     if result == 0:
         print('я вас не понял')
     else:
         print(sortPers[-1][1])
         if sortPers[-1][0] != 100:
-            if input('вам понравился ответ?[да][нет] ').lower() == 'нет':
-                cur.execute(f"INSERT INTO `BOD` VALUES ('{pr}', '{input('введите свой вариант ответа: ')}')")
-                print(SAL_ALL())
+            if input('вам понравился ответ?[да = anything][нет = .] ').lower() == '.':
+                otvet_polzovatelya = input("ваш ответ")
+                db.append([prompt, otvet_polzovatelya])
+                print(db)
+            #вам понравился ответ?
 
 while True:
     prompt = str(input("your prompt: "))
     if prompt == 'exit':
+        DataBaseSQL3inCode = sqlite3.connect
+        #cursor = DataBaseSQL3inCode.cursor()
+        cursor.execute("DELETE FROM AnsvQest")
+        #doesn't working...
+        for n in range(len(db)):
+            cursor.execute(f"INSERT INTO AnsvQest VALUES ({db[n][0], db[n][1]})")
+            DataBaseSQL3inCode.commit()
+        DataBaseSQL3inCode.close()
         print('пока')
-        con.commit()
-        cur.close()
         exit()
-    print(prompt)
     recp(prompt)
 
