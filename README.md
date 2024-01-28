@@ -1,3 +1,5 @@
+принцип работы/how does it work
+-
 eng:
 As you have already understood, this is a chatbot. My chatbot works on simple human learning and has its own open database. The training takes place by adding data to the database. The project is based on the following method of work, I do not know if it was used before me or not, but I openly declare that the project was developed by me personally, and no one else. Actually, the first lines of the project establish a connection to the database:
 
