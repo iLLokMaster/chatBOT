@@ -106,3 +106,7 @@ print(db)
     -сделать граффическую оболочку;
     -сделать поддержку режима диалога;
     -сделать сохранение базы данных в облаке;
+
+    -make a graffiti wrapper;
+    -make dialog mode support;
+    -save the database to the cloud;
