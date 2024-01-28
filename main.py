@@ -43,6 +43,7 @@ def recp(prompt):
             if input('вам понравился ответ?[да = anything][нет = .] ').lower() == '.':
                 otvet_polzovatelya = input("ваш ответ")
                 cursor.execute(f"INSERT INTO AnsvQest VALUES ('{prompt}', '{otvet_polzovatelya}')")
+                DataBaseSQL3inCode.commit()
                 db.append([prompt, otvet_polzovatelya])
                 print(db)
             #вам понравился ответ?
@@ -50,9 +51,6 @@ def recp(prompt):
 while True:
     prompt = str(input("your prompt: "))
     if prompt == 'exit':
-        DataBaseSQL3inCode = sqlite3.connect
-        #cursor = DataBaseSQL3inCode.cursor()
-        DataBaseSQL3inCode.commit()
         DataBaseSQL3inCode.close()
         print('пока')
         exit()
