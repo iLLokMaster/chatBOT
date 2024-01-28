@@ -22,8 +22,8 @@ DataBaseSQL3inCode.commit()
 
 pers = []
 
-    pr = prompt
+pr = prompt
     
-    pr = pr.lower()
+pr = pr.lower()
     
-    pr = re.sub('\W+',' ', pr )
+pr = re.sub('\W+',' ', pr )
