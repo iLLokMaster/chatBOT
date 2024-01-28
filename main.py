@@ -42,6 +42,7 @@ def recp(prompt):
         if sortPers[-1][0] != 100:
             if input('вам понравился ответ?[да = anything][нет = .] ').lower() == '.':
                 otvet_polzovatelya = input("ваш ответ")
+                cursor.execute(f"INSERT INTO AnsvQest VALUES ('{prompt}', '{otvet_polzovatelya}')")
                 db.append([prompt, otvet_polzovatelya])
                 print(db)
             #вам понравился ответ?
@@ -51,13 +52,8 @@ while True:
     if prompt == 'exit':
         DataBaseSQL3inCode = sqlite3.connect
         #cursor = DataBaseSQL3inCode.cursor()
-        cursor.execute("DELETE FROM AnsvQest")
-        #doesn't working...
-        for n in range(len(db)):
-            cursor.execute(f"INSERT INTO AnsvQest VALUES ({db[n][0], db[n][1]})")
-            DataBaseSQL3inCode.commit()
+        DataBaseSQL3inCode.commit()
         DataBaseSQL3inCode.close()
         print('пока')
         exit()
     recp(prompt)
-
