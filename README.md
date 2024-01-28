@@ -9,6 +9,8 @@ DataBaseSQL3inCode = sqlite3.connect("DataBaseInFiles")
 
 cursor = DataBaseSQL3inCode.cursor()
 
+После устоновки соединения с базой данных, в переменную db(от английского data base) присваивается значение хранимой в коде базы данных. И изменения сохраняются.
+
 db = cursor.execute("SELECT * FROM AnsvQest").fetchall()
 
 DataBaseSQL3inCode.commit()
