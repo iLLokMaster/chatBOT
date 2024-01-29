@@ -1,4 +1,4 @@
-установка библиотек
+установка библиотек/install librares
 -
     pip install sqlite3
     pip install re
@@ -118,3 +118,6 @@ print(db)
     -make a graffiti wrapper;
     -make dialog mode support;
     -save the database to the cloud;
+    -make voice input;
+    -make a voice response playback;
+    -train AI
