@@ -6,15 +6,23 @@
 Для обычных пользователей бета версии/For regular beta users
 -
 1)скачайте проект, а именно файлы DataBaseInFiles и main.py. Скачайте python(https://www.python.org/) и (по желанию ) среду разработки, к примеру PyCharm(https://www.jetbrains.com/pycharm/download/other.html) советую версию не выше 2023.2.5, версии новее платные.
+
 2)поместите файлы проекта в одной удобной для вас папке.
+
 3)откройте main.py как PyCharm(или средой разработки которую вы устоновили)
+
 4)запускайте!
+
 !!!ЕСЛИ НА МОМЕНТ ЧТЕНИЯ В ФАЙЛАХ ПРОЕКТА ЕСТЬ КОКОЙ ЛИБО ФАЙЛ С РАСШИРЕНИЕМ .exe, ТО ПРОСТО УСТАНОВИТЕ ЕГО ВМЕСТЕ С БАЗОЙ ДАННЫХ!!!
 
 1)download the project, namely the DataBase In Files and main.py . Download python(https://www.python.org /) and (optionally) a development environment, for example PyCharm(https://www.jetbrains.com/pycharm/download/other.html ) I recommend a version no higher than 2023.2.5, newer versions are paid.
+
 2)Put the project files in one folder convenient for you.
+
 3)Open main.py as PyCharm (or the development environment that you have installed)
+
 4) Run!
+5) 
 !!!!!!IF THERE IS ANY FILE WITH THE .exe EXTENSION IN THE PROJECT FILES AT THE TIME OF READING, THEN JUST INSTALL IT ALONG WITH THE DATABASE!!!
 
 принцип работы/how does it work
