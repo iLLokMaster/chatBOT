@@ -1,6 +1,7 @@
 установка библиотек
 -
 pip install sqlite3
+
 pip install re
 
 принцип работы/how does it work
