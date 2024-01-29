@@ -14,6 +14,7 @@
 4)запускайте!
 
 !!!ЕСЛИ НА МОМЕНТ ЧТЕНИЯ В ФАЙЛАХ ПРОЕКТА ЕСТЬ КОКОЙ ЛИБО ФАЙЛ С РАСШИРЕНИЕМ .exe, ТО ПРОСТО УСТАНОВИТЕ ЕГО ВМЕСТЕ С БАЗОЙ ДАННЫХ!!!
+
 ==============================================================================================================================
 
 1)download the project, namely the DataBase In Files and main.py . Download python(https://www.python.org /) and (optionally) a development environment, for example PyCharm(https://www.jetbrains.com/pycharm/download/other.html ) I recommend a version no higher than 2023.2.5, newer versions are paid.
