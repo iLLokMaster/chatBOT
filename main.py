@@ -12,7 +12,6 @@ cursor = DataBaseSQL3inCode.cursor()
 #cursor.execute("INSERT INTO AnsvQest VALUES ('привет', 'Привет, как у тебя дела?')")
     ###select all from Data Base and insert to db
 db = cursor.execute("SELECT * FROM AnsvQest").fetchall()
-print(db)
     ###commit changes and cloce Data Base
 DataBaseSQL3inCode.commit()
 #DataBaseSQL3inCode.close()
@@ -34,12 +33,16 @@ def recp(prompt):
     sortPers = sorted(pers)
     #result = проценты совпадения
     if result == 0:
-        print('я вас не понял')
+        print('Я вас не понял(')
+        otvet_polzovatelya = input("Ваш ответ: ")
+        cursor.execute(f"INSERT INTO AnsvQest VALUES ('{prompt}', '{otvet_polzovatelya}')")
+        DataBaseSQL3inCode.commit()
+        db.append([prompt, otvet_polzovatelya])
     else:
         #ответ бота
-        print(sortPers[-1][1])
+        print('Ответ бота: ' + sortPers[-1][1])
         if sortPers[-1][0] != 100:
-            if input('вам понравился ответ?[да = anything][нет = .] ').lower() == '.':
+            if input('Вам понравился ответ? [Если да, то введите что-нибудь] [нет = .] ').lower() == '.':
                 otvet_polzovatelya = input("ваш ответ")
                 cursor.execute(f"INSERT INTO AnsvQest VALUES ('{prompt}', '{otvet_polzovatelya}')")
                 DataBaseSQL3inCode.commit()
@@ -51,10 +54,12 @@ def recp(prompt):
                 DataBaseSQL3inCode.commit()
                 db.append([prompt, sortPers[-1][1]])
 while True:
-    prompt = str(input("your prompt: "))
+    prompt = str(input("Ваш вопрос: "))
     if prompt == 'exit' or prompt == 'выход':
         DataBaseSQL3inCode.close()
         print('пока')
         exit()
+    elif prompt == 'db'.lower() or prompt == 'ви'.lower() or prompt == 'data base'.lower() or prompt == 'your data base'.lower() or prompt == 'твоя база данных'.lower():
+        for h in range(len(db)):
+            print(db[h])
     recp(prompt)
-
