@@ -1,5 +1,9 @@
 import re
 import sqlite3
+import os
+import random
+import time
+
 DataBaseSQL3inCode = sqlite3.connect("DataBaseInFiles")
     ###create cursor
 cursor = DataBaseSQL3inCode.cursor()
@@ -39,17 +43,16 @@ def recp(prompt):
         DataBaseSQL3inCode.commit()
         db.append([prompt, otvet_polzovatelya])
     else:
-        #ответ бота
-        otvet_bota = sortPers[-1][1]
-        split_regex = re.compile(r'[.|!|?|…]')
-        sentences = filter(lambda t: t, [t.strip() for t in split_regex.split(otvet_bota)])
         print('Ответ бота: ')
-        for s in sentences:
-            print(s)
+        a = sortPers[-1][1]
+        b = list(a)
+        for alphabet in b:
+            print(alphabet, end='')
+            time.sleep(0.01)
 
         if sortPers[-1][0] != 100:
-            if input('Вам понравился ответ? [Если да, то введите что-нибудь] [нет = .] ').lower() == '.':
-                otvet_polzovatelya = input("ваш ответ")
+            if input('\nВам понравился ответ? [Если да, то введите что-нибудь] [нет = .] ').lower() == '.':
+                otvet_polzovatelya = input("\nваш ответ")
                 cursor.execute(f"INSERT INTO AnsvQest VALUES ('{prompt}', '{otvet_polzovatelya}')")
                 DataBaseSQL3inCode.commit()
                 db.append([prompt, otvet_polzovatelya])
@@ -60,22 +63,32 @@ def recp(prompt):
                 DataBaseSQL3inCode.commit()
                 db.append([prompt, sortPers[-1][1]])
 while True:
-    prompt = str(input("Ваш вопрос: "))
+    prompt = str(input("\nВаш вопрос: "))
     if prompt == 'exit' or prompt == 'выход':
         print('сохраняем изменения в базе')
         try:
             DataBaseSQL3inCode.close()
+            print('изменения сохранены')
         except sqlite3.Error as e:
             print("не удалось сохранить изменения")
             # get the error code
             error_code = e.args[0]
             print(f"Error code: {error_code}")
         print('пока')
+        print('Приведите пожалуйста поскорее. Я по вам уже скучаю:(')
         exit()
     elif prompt == 'db'.lower() or prompt == 'ви'.lower() or prompt == 'data base'.lower() or prompt == 'your data base'.lower() or prompt == 'твоя база данных'.lower():
         for h in range(len(db)):
             print(db[h])
     elif prompt == 'что ты умеешь':
         print('я умею отвечать на вопросы и постоянно обучаюсь, но не поддерживаю режим диалога. Мои программисты под контролем Прядиева Романа, очень стараются для продвижения проекта, и постоянно его поддерживают. Если вам угодно, вы можете обновить программу(https://github.com/iLLokMaster/chatBOT)')
+    elif prompt == 'открой браузер':
+        os.system('C:/Users/B-ZONE/AppData/Local/Yandex/YandexBrowser/Application/browser.exe')
+        print('на')
+    elif prompt == 'открой сам пикер':
+        os.system('C:/Program Files (x86)/Steam/Steam.exe')
+        time.sleep(10)
+        os.system('C:/Users/B-ZONE/Desktop/игры/SteamAchievementManager-7.0.25/SAM.Picker.exe')
+        print('на')
     else:
         recp(prompt)
