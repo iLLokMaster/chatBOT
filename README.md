@@ -1,6 +1,6 @@
+![iStock-927504604](https://github.com/iLLokMaster/chatBOT/assets/130349746/ae1d948f-3f1b-436c-9b82-bc62b59ee63b)
 
-установка библиотек/install librares![iStock-927504604](https://github.com/iLLokMaster/chatBOT/assets/130349746/ae1d948f-3f1b-436c-9b82-bc62b59ee63b)
-
+установка библиотек/install librares
 -
     pip install sqlite3
     pip install re
