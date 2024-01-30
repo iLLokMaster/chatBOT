@@ -40,7 +40,13 @@ def recp(prompt):
         db.append([prompt, otvet_polzovatelya])
     else:
         #ответ бота
-        print('Ответ бота: ' + sortPers[-1][1])
+        otvet_bota = sortPers[-1][1]
+        split_regex = re.compile(r'[.|!|?|…]')
+        sentences = filter(lambda t: t, [t.strip() for t in split_regex.split(otvet_bota)])
+        print('Ответ бота: ')
+        for s in sentences:
+            print(s)
+
         if sortPers[-1][0] != 100:
             if input('Вам понравился ответ? [Если да, то введите что-нибудь] [нет = .] ').lower() == '.':
                 otvet_polzovatelya = input("ваш ответ")
@@ -56,10 +62,20 @@ def recp(prompt):
 while True:
     prompt = str(input("Ваш вопрос: "))
     if prompt == 'exit' or prompt == 'выход':
-        DataBaseSQL3inCode.close()
+        print('сохраняем изменения в базе')
+        try:
+            DataBaseSQL3inCode.close()
+        except sqlite3.Error as e:
+            print("не удалось сохранить изменения")
+            # get the error code
+            error_code = e.args[0]
+            print(f"Error code: {error_code}")
         print('пока')
         exit()
     elif prompt == 'db'.lower() or prompt == 'ви'.lower() or prompt == 'data base'.lower() or prompt == 'your data base'.lower() or prompt == 'твоя база данных'.lower():
         for h in range(len(db)):
             print(db[h])
-    recp(prompt)
+    elif prompt == 'что ты умеешь':
+        print('я умею отвечать на вопросы и постоянно обучаюсь, но не поддерживаю режим диалога. Мои программисты под контролем Прядиева Романа, очень стараются для продвижения проекта, и постоянно его поддерживают. Если вам угодно, вы можете обновить программу(https://github.com/iLLokMaster/chatBOT)')
+    else:
+        recp(prompt)
