@@ -67,20 +67,17 @@ def recp(prompt):
                 db.append([prompt, sortPers[-1][1]])
 while True:
     prompt = str(input("\nВаш вопрос: "))
-    if prompt == 'exit' or prompt == 'выход':
+        if prompt == 'exit' or prompt == 'выход':
         print('     сохраняем изменения в базе')
         try:
             DataBaseSQL3inCode.close()
             print('     изменения сохранены')
         except sqlite3.Error as e:
             print("     не удалось сохранить изменения")
-            # get the error code
             error_code = e.args[0]
             print(f"     Error code: {error_code}")
-        if random.randint(1,2) == 1: #оптимизировать рандом. выбор
-            print('пока')
-        else:
-            print('Приходите пожалуйста поскорее. Я по вам уже скучаю:(')
+        good_by = ['почему ты меня бросаешь? не надо, пожалуйста.(котик с блестящими глазками)''пока', 'Приходите пожалуйста поскорее. Я по вам уже скучаю:(', 'не оставляйте меня одного на долго','нееееееее...', 'не оставляй меня на долго, пожалуюста, я очень тебя прошу']
+        print(good_by[random.randint(0,len(good_by)-1)])
         exit()
     elif prompt == 'db'.lower() or prompt == 'ви'.lower() or prompt == 'data base'.lower() or prompt == 'your data base'.lower() or prompt == 'твоя база данных'.lower():
         for h in range(len(db)):
