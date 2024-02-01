@@ -149,3 +149,23 @@ print(db)
     -make voice input;
     -make a voice response playback;
     -train AI
+
+Если вы нашли баг(ошибку в программе)
+-
+У вас есть варианты:
+
+    -связаться со мной(https://tapy.me/illok)
+    -вспомнить мемчик(да ладно, и так сойдёт!!!)
+    -исправить самому, и создать в проекте новую ветку.
+
+Усли вы захотели стать разработчиком проекта/If you want to become a project developer
+-
+У вас есть варианты:
+
+    -связаться со мной(https://tapy.me/illok)
+    -делать самому новые ветки в проекте
+
+You have options:
+
+    -contact me(https://rape.me/ilook )
+    -make new branches in the project yourself
