@@ -66,6 +66,8 @@ def recp(prompt):
                 DataBaseSQL3inCode.commit()
                 db.append([prompt, sortPers[-1][1]])
 while True:
+    #сдесь юудет роспознование голоса
+    #и его запись
     prompt = str(input("\nВаш вопрос: "))
         if prompt == 'exit' or prompt == 'выход':
         print('     сохраняем изменения в базе')
