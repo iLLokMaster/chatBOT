@@ -66,7 +66,23 @@ def recp(prompt):
                 DataBaseSQL3inCode.commit()
                 db.append([prompt, sortPers[-1][1]])
 while True:
-    prompt = str(input("\nВаш вопрос: "))
+
+    
+    prompt = ''
+    aai.settings.api_key = "35b431952e5c4660adb43c39b15ce663" # Replace with your API key
+    FILE_URL = "https://github.com/AssemblyAI-Examples/audio-examples/raw/main/20230607_me_canadian_wildfires.mp3"
+    config = aai.TranscriptionConfig(speaker_labels=True)
+    transcriber = aai.Transcriber()
+    transcript = transcriber.transcribe(
+        FILE_URL,
+        config=config
+    )
+    for utterance in transcript.utterances:
+        prompt += utterance.text
+    print(f"вы сказали: {prompt}")
+
+    
+    #prompt = str(input("\nВаш вопрос: "))
         if prompt == 'exit' or prompt == 'выход':
         print('     сохраняем изменения в базе')
         try:
