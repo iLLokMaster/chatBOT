@@ -150,11 +150,14 @@ print(db)
     -make a voice response playback;
     -train AI
 
-на счёт оболочки
+На счёт оболочки/About the shell
 -
 у меня есть три варианта реализации: первый, сделать оболочку через telegram, Второй, делать оболочку самому на python, Третий, комбинировать всё вместе.
-у телеграма усть значительный минус, бот будет работать только при запущенном пк(и скорее всего именно моём.), либо придётся каждому пользователю делать своего бота.
+у телеграма есть значительный минус, бот будет работать только при запущенном пк(и скорее всего именно моём.), либо придётся каждому пользователю делать своего бота.
 С оболочкой через библиотеки в python надо будет повозится, но пользователю будет проще.
+I have three implementation options: the first, to make a shell via telegram, the second, to make a shell myself in python, the third, to combine everything together.
+telegram has a significant disadvantage, the bot will only work when the PC is running (and most likely mine.), or each user will have to make their own bot.
+It will be necessary to tinker with the shell through libraries in python, but it will be easier for the user.
 
 Если вы нашли баг(ошибку в программе)
 -
