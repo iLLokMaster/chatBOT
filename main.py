@@ -69,7 +69,7 @@ while True:
     #запись голоса здесь
     #здесь будет роспознование голоса 
     prompt = str(input("\nВаш вопрос: "))
-        if prompt == 'exit' or prompt == 'выход':
+    if prompt == 'exit' or prompt == 'выход':
         print('     сохраняем изменения в базе')
         try:
             DataBaseSQL3inCode.close()
