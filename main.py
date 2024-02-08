@@ -4,41 +4,37 @@ import os
 import random
 import time
 import webbrowser
-#connect Data Base
-DataBaseSQL3inCode = sqlite3.connect("DataBaseInFiles")
-#create cursor
-cursor = DataBaseSQL3inCode.cursor()
+import speech_recognition
+
+debug = 0                                                                                       #set 1 to turn on debug
+DataBaseSQL3inCode = sqlite3.connect("DataBaseInFiles")                                         #connect Data Base
+cursor = DataBaseSQL3inCode.cursor()                                                            #create cursor
 try:
     cursor.execute("SELECT * FROM AnsvQest")
 except sqlite3.Error:
-    ###create table
-    ###perform only for the first time
     cursor.execute("""CREATE TABLE AnsvQest (
             answer text,
             qestion text
-        )""")
-    cursor.execute("INSERT INTO AnsvQest VALUES ('привет', 'Привет, как у тебя дела?')")
-###select all from Data Base and insert to db
-db = cursor.execute("SELECT * FROM AnsvQest").fetchall()
-    ###commit changes and cloce Data Base
-DataBaseSQL3inCode.commit()
-###body of programm
-def per_com(list1, list2): #calculation of the percentage of coincidence of the question from the database and the user's question
+        )""")                                                                                   ###create table ###perform only for the first time
+    cursor.execute("INSERT INTO AnsvQest VALUES ('привет', "
+                   "'Привет, как у тебя дела?')")                                                                                                
+db = cursor.execute("SELECT * FROM AnsvQest").fetchall()                                        ###select all from Data Base and insert to db
+DataBaseSQL3inCode.commit()                                                                     ###commit changes and cloce Data Base
+def per_com(list1, list2):                                                                      ###calculation of the percentage of coincidence of the question from the database and the user's question
     common_elements = set(list1) & set(list2)
     percent_match = (len(common_elements) / len(set(list1 + list2))) * 100
     return percent_match
 def recp(prompt):
     pers = []
     pr = prompt
-    pr = pr.lower()
-    pr = re.sub('\W+',' ', pr )
+    pr = pr.lower()                                                                              #pr = re.sub('\W+',' ', pr )
     for k in range(len(db)):
         list_a = pr
-        list_b = re.sub('\W+',' ', db[k][0] )
-        result = per_com(list_a, list_b)
+        list_b = db[k][0]                                                                        #list_b = re.sub('\W+',' ', db[k][0] )
+        result = per_com(list_a, list_b)                                                         ###result = проценты совпадения
         pers.append([result, db[k][1]])
     sortPers = sorted(pers)
-    #result = проценты совпадения
+    
     if result == 0:
         print('Я вас не понял(')
         otvet_polzovatelya = input("Ваш ответ: ")
@@ -50,40 +46,65 @@ def recp(prompt):
         a = sortPers[-1][1]
         b = list(a)
         for alphabet in b:
-            print(alphabet, end='')
+            print( alphabet,  end='')
             time.sleep(0.01)
-
-        if sortPers[-1][0] != 100:
+        if sortPers[-1][0] != 100:                                                                 ###вам понравился ответ?
             if input('\nВам понравился ответ? [Если да, то введите что-нибудь] [нет = .] ').lower() == '.':
                 otvet_polzovatelya = input("\nваш ответ")
-                cursor.execute(f"INSERT INTO AnsvQest VALUES ('{prompt}', '{otvet_polzovatelya}')")
+                cursor.execute(
+                    f"INSERT INTO AnsvQest VALUES ('"
+                    f"{prompt}', "
+                    f"'{otvet_polzovatelya}')"
+                )
                 DataBaseSQL3inCode.commit()
                 db.append([prompt, otvet_polzovatelya])
                 #print(db)
-            #вам понравился ответ?
             else:
-                cursor.execute(f"INSERT INTO AnsvQest VALUES ('{prompt}', '{sortPers[-1][1]}')")
+                cursor.execute(f"INSERT INTO AnsvQest VALUES ('"
+                               f"{prompt}', "
+                               f"'{sortPers[-1][1]}')")
                 DataBaseSQL3inCode.commit()
                 db.append([prompt, sortPers[-1][1]])
 while True:
-    #запись голоса здесь
-    #здесь будет роспознование голоса 
-    prompt = str(input("\nВаш вопрос: "))
+    sr = speech_recognition.Recognizer()                                                           ###speech recognition
+    sr.pause_threshold = 0.5
+    with speech_recognition.Microphone() as mic:
+        sr.adjust_for_ambient_noise(
+            source = mic, 
+            duration = 0.5
+        )
+        audio = sr.listen(source = mic)
+        query = sr.recognize_google(
+            audio_data = audio, 
+            language = 'ru-RU'
+        ).lower()     
+    prompt = query                                                                                 #= str(input("\nВаш вопрос: ")).lower() and with out "query"
+    
+    if debug == 1:
+        print(prompt)
     if prompt == 'exit' or prompt == 'выход':
-        print('     сохраняем изменения в базе')
-        try:
-            DataBaseSQL3inCode.close()
-            print('     изменения сохранены')
-        except sqlite3.Error as e:
-            print("     не удалось сохранить изменения")
-            error_code = e.args[0]
-            print(f"     Error code: {error_code}")
-        good_by = ['почему ты меня бросаешь? не надо, пожалуйста.(котик с блестящими глазками)''пока', 'Приходите пожалуйста поскорее. Я по вам уже скучаю:(', 'не оставляйте меня одного на долго','нееееееее...', 'не оставляй меня на долго, пожалуюста, я очень тебя прошу']
+        if debug == 1:
+            print('     сохраняем изменения в базе')
+        if debug == 1:
+            try:
+                DataBaseSQL3inCode.close()
+                print('     изменения сохранены')
+            except sqlite3.Error as e:
+                print("     не удалось сохранить изменения")
+                error_code = e.args[0]
+                print(f"     Error code: {error_code}")
+        good_by = [
+            'почему ты меня бросаешь? не надо, пожалуйста.(котик с блестящими глазками)''пока', 
+            'Приходите пожалуйста поскорее. Я по вам уже скучаю:(', 
+            'не оставляйте меня одного на долго','нееееееее...', 
+            'не оставляй меня на долго, пожалуйста, я очень тебя прошу'
+        ]
         print(good_by[random.randint(0,len(good_by)-1)])
         exit()
-    elif prompt == 'db'.lower() or prompt == 'ви'.lower() or prompt == 'data base'.lower() or prompt == 'your data base'.lower() or prompt == 'твоя база данных'.lower():
-        for h in range(len(db)):
-            print(db[h])
+    elif prompt == 'db' or prompt == 'ви' or prompt == 'data base' or prompt == 'your data base' or prompt == 'твоя база данных':
+        if debug == 1:
+            for h in range(len(db)):
+                print(db[h])
     elif prompt == 'что ты умеешь':
         print('я умею отвечать на вопросы и постоянно обучаюсь, но не поддерживаю режим диалога. Мои программисты под контролем Прядиева Романа, очень стараются для продвижения проекта, и постоянно его поддерживают. Если вам угодно, вы можете обновить программу(https://github.com/iLLokMaster/chatBOT)')
     elif prompt == 'открой браузер':
