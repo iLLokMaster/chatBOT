@@ -4,6 +4,7 @@
 -
     pip install sqlite3
     pip install re
+    pip3 install SpeechRecognition
     
 Для обычных пользователей бета версии/For regular beta users
 -
