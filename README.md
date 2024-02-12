@@ -7,7 +7,9 @@
     pip3 install SpeechRecognition
 
 https://docs.python.org/3/library/sqlite3.html
+
 https://docs.python.org/3/library/re.html
+
 https://pypi.org/project/SpeechRecognition/
     
 Для обычных пользователей бета версии/For regular beta users
