@@ -11,6 +11,8 @@
     pip install sqlite3
     pip install re
     pip3 install SpeechRecognition
+    pip3 install pyaudio
+    pip3 install vosk
 
 https://docs.python.org/3/library/sqlite3.html
 
