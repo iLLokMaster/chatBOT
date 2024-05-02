@@ -1,6 +1,6 @@
 ![iStock-927504604](https://github.com/iLLokMaster/chatBOT/assets/130349746/ae1d948f-3f1b-436c-9b82-bc62b59ee63b)
 
-ссыдки на модели/models
+ссылки на модели/models
 -
 Большая модель/big:[https://vk.com/away.php?to=http%3A%2F...](https://vk.com/away.php?to=http%3A%2F%2Falphacephei.com%2Fkaldi%2Fmodels%2Fvosk-model-ru-0.10.zip&cc_key)
 
