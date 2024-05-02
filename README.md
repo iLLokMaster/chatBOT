@@ -3,6 +3,7 @@
 ссыдки на модели/models
 -
 Большая модель/big:[https://vk.com/away.php?to=http%3A%2F...](https://vk.com/away.php?to=http%3A%2F%2Falphacephei.com%2Fkaldi%2Fmodels%2Fvosk-model-ru-0.10.zip&cc_key)
+
 Маленькая модель/small: https://vk.com/away.php?to=https%3A%2...
 
 установка библиотек/install librares
