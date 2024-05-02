@@ -1,5 +1,10 @@
 ![iStock-927504604](https://github.com/iLLokMaster/chatBOT/assets/130349746/ae1d948f-3f1b-436c-9b82-bc62b59ee63b)
 
+ссыдки на модели/models
+-
+Большая модель/big:https://vk.com/away.php?to=http%3A%2F...
+Маленькая модель/small: https://vk.com/away.php?to=https%3A%2...
+
 установка библиотек/install librares
 -
     pip install sqlite3
