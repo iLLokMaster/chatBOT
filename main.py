@@ -1,4 +1,3 @@
-
 import sqlite3
 import os
 import random
@@ -7,7 +6,6 @@ import json
 import pyaudio
 from vosk import Model, KaldiRecognizer
 import time
-import winsound
 
 debug = 0  # set 1 to turn on debug
 DataBaseSQL3inCode = sqlite3.connect("DataBaseInFiles")  # connect Data Base
@@ -24,12 +22,11 @@ except sqlite3.Error:
 db = cursor.execute("SELECT * FROM AnsvQest").fetchall()  ###select all from Data Base and insert to db
 DataBaseSQL3inCode.commit()  ###commit changes and cloce Data Base
 
-model = Model('model')
+model = Model('models/model')
 rec = KaldiRecognizer(model, 16000)
 p = pyaudio.PyAudio()
 stream = p.open(format = pyaudio.paInt16, channels = 1, rate = 16000, input = True, frames_per_buffer = 8000)
 stream.start_stream()
-print('говорите')
 def listen():
     while True:
         data = stream.read(4000, exception_on_overflow = False)
@@ -42,8 +39,6 @@ def per_com(list1,
     common_elements = set(list1) & set(list2)
     percent_match = (len(common_elements) / len(set(list1 + list2))) * 100
     return percent_match
-
-
 def recp(prompt):
     pers = []
     pr = prompt
@@ -54,15 +49,12 @@ def recp(prompt):
         result = per_com(list_a, list_b)  ###result = проценты совпадения
         pers.append([result, db[k][1]])
     sortPers = sorted(pers)
-
     if result == 0:
         print('Я вас не понял. Скажите ответ на ваш вопрос.(\n')
-
         for text in listen():
-            print(text)
             otvet_polzovatelya = text
-            if text == '':
-                break
+            if text != '':
+                print(text)
         cursor.execute(f"INSERT INTO AnsvQest VALUES ('{prompt}', '{otvet_polzovatelya}')")
         DataBaseSQL3inCode.commit()
         db.append([prompt, otvet_polzovatelya])
@@ -78,100 +70,112 @@ def recp(prompt):
             print('вам понравился ответ?[да][нет]')
 
             for text in listen():
-                print(text)
-
-            if text == '':
-                pass
-            elif text.lower() == 'нет':
-                for text in listen():
+                if text != '':
                     print(text)
-                    print('ваш ответ')
 
-                    for text in listen():
+                    if text.lower() == 'нет':
+                        print('ваш вариант ответа')
+                        for text in listen():
+                            if text != '':
+                                print(text)
+                                print('\n')
+                                cursor.execute(
+                                    f"INSERT INTO AnsvQest VALUES ('"
+                                    f"{prompt}', "
+                                    f"'{text}')"
+                                )
+                                DataBaseSQL3inCode.commit()
+                                db.append([prompt, text])
+                                chat()
+                        # print(db)
+                    elif text.lower() == 'да\n':
+                        cursor.execute(f"INSERT INTO AnsvQest VALUES ('"
+                                       f"{prompt}', "
+                                       f"'{sortPers[-1][1]}')")
+                        DataBaseSQL3inCode.commit()
+                        db.append([prompt, sortPers[-1][1]])
+                        chat()
+
+
+def chat(chhat = 0):
+    while True:
+        print('говорите')
+        for text in listen():
+            prompt = text
+
+            if prompt == '':
+                pass
+            elif prompt in ['режим игры', 'игры']:
+                print(prompt)
+                print('выберите игру [elite dangerous]')
+                for text in listen():
+                    if text in ['элитная опастность', 'элитной опасностью', 'элитное опасность', 'опасности', 'элитной опасность']:
                         print(text)
-                        if text == '':
-                            break
-                    otvet_polzovatelya = text
+                        print('включаю')
+                        #buttons
+                    elif text == 'назад':
+                        print(text)
+                        pass
 
-                cursor.execute(
-                    f"INSERT INTO AnsvQest VALUES ('"
-                    f"{prompt}', "
-                    f"'{otvet_polzovatelya}')"
-                )
-                DataBaseSQL3inCode.commit()
-                db.append([prompt, otvet_polzovatelya])
-                # print(db)
-            elif text.lower() == 'да':
-                cursor.execute(f"INSERT INTO AnsvQest VALUES ('"
-                               f"{prompt}', "
-                               f"'{sortPers[-1][1]}')")
-                DataBaseSQL3inCode.commit()
-                db.append([prompt, sortPers[-1][1]])
+            elif prompt == 'exit' or prompt == 'выход':
+                print(prompt)
+                if debug == 1:
+                    print('     сохраняем изменения в базе')
+                if debug == 1:
+                    try:
+                        DataBaseSQL3inCode.close()
+                        print('     изменения сохранены')
+                    except sqlite3.Error as e:
+                        print("     не удалось сохранить изменения")
+                        error_code = e.args[0]
+                        print(f"     Error code: {error_code}")
+                good_by = [
+                    'почему ты меня бросаешь? не надо, пожалуйста.(котик с блестящими глазками)', 'пока',
+                    'Приходите пожалуйста поскорее. Я по вам уже скучаю:(',
+                    'не оставляйте меня одного на долго', 'нееееееее...',
+                    'не оставляй меня на долго, пожалуйста, я очень тебя прошу'
+                ]
+                print(good_by[random.randint(0, len(good_by) - 1)])
+                exit()
+            #elif prompt in ['заметки', 'идеи']:
 
-
-chat = 0
-while True:
-    for text in listen():
-        print(text)
-        prompt = text
-
-        if prompt == '':
-            pass
-        elif chat == 1:
-            recp(prompt)
-        elif prompt in ['режим игры', 'игры']:
-            print('выберите игру [elite dangerous]')
-            for text in listen():
+            elif prompt in['db', 'ви', 'data base', 'your data base', 'твоя база данных', 'база данных']:
+                print(prompt)
+                if debug == 1:
+                    for h in range(len(db)):
+                        print(db[h])
+            elif prompt == 'что ты умеешь':
+                print(prompt)
+                print('я умею отвечать на вопросы и постоянно обучаюсь, но не поддерживаю режим диалога. Мои программисты под контролем Прядиева Романа, очень стараются для продвижения проекта, и постоянно его поддерживают. Если вам угодно, вы можете обновить программу(https://github.com/iLLokMaster/chatBOT)')
+            elif prompt in ['открой браузер', 'браузер']:
+                print(prompt)
+                os.system('C:/Users/B-ZONE/AppData/Local/Yandex/YandexBrowser/Application/browser.exe')
+                print('на')
+            elif prompt in ['домашняя работа', 'домашнюю работу']:
+                print(prompt)
+                webbrowser.open('https://dnevnik.ru/marks/school/1000009993521/student/1000012990748/current', new = 2)
+                print('держи')
+            elif prompt == 'открой игры':
+                print(prompt)
+                os.system('C:/Program Files (x86)/Steam/Steam.exe')
+                print('на')
+            elif prompt in ['телеграм', 'телеграмм']:
                 print(text)
+                print('открываю')
+                webbrowser.open('https://web.telegram.org/', new = 2)
+            elif prompt in ['чат', 'общение', 'к общению', 'в общении']:
+                print('чат активирован')
+                chhat = 1
+            elif prompt in ['закрой чат', 'хватит общаться']:
+                print('выключаю...')
+                chhat = 0
+            elif prompt in ['видео', 'я хочу посмотреть видео']:
+                webbrowser.open('https://www.youtube.com/', new = 2)
 
-                if text in ['элитная опастность', 'элитной опасностью', 'элитное опасность', 'опасности', 'элитной опасность']:
-                    print('включаю')
-                    #buttons
-                elif text == 'назад':
-                    pass
-
-        elif prompt == 'exit' or prompt == 'выход':
-            if debug == 1:
-                print('     сохраняем изменения в базе')
-            if debug == 1:
-                try:
-                    DataBaseSQL3inCode.close()
-                    print('     изменения сохранены')
-                except sqlite3.Error as e:
-                    print("     не удалось сохранить изменения")
-                    error_code = e.args[0]
-                    print(f"     Error code: {error_code}")
-            good_by = [
-                'почему ты меня бросаешь? не надо, пожалуйста.(котик с блестящими глазками)', 'пока',
-                'Приходите пожалуйста поскорее. Я по вам уже скучаю:(',
-                'не оставляйте меня одного на долго', 'нееееееее...',
-                'не оставляй меня на долго, пожалуйста, я очень тебя прошу'
-            ]
-            print(good_by[random.randint(0, len(good_by) - 1)])
-            exit()
-        elif prompt == 'db' or prompt == 'ви' or prompt == 'data base' or prompt == 'your data base' or prompt == 'твоя база данных':
-            if debug == 1:
-                for h in range(len(db)):
-                    print(db[h])
-        elif prompt == 'что ты умеешь':
-            print(
-                'я умею отвечать на вопросы и постоянно обучаюсь, но не поддерживаю режим диалога. Мои программисты под контролем Прядиева Романа, очень стараются для продвижения проекта, и постоянно его поддерживают. Если вам угодно, вы можете обновить программу(https://github.com/iLLokMaster/chatBOT)')
-        elif prompt == 'открой браузер':
-            os.system('C:/Users/B-ZONE/AppData/Local/Yandex/YandexBrowser/Application/browser.exe')
-            print('на')
-        elif prompt == 'какое дз':
-            webbrowser.open('https://dnevnik.ru/marks/school/1000009993521/student/1000012990748/current', new = 2)
-            print('держи')
-        elif prompt == 'открой сам пикер':
-            os.system('C:/Program Files (x86)/Steam/Steam.exe')
-            time.sleep(10)
-            os.system('C:/Users/B-ZONE/Desktop/игры/SteamAchievementManager-7.0.25/SAM.Picker.exe')
-            print('на')
-        elif prompt == 'режим чата':
-            chat = 1
-            for text in listen():
+            elif chhat == 1:
+                print(prompt)
+                recp(prompt)
+            else:
                 print(text)
-                prompt = text
-            recp(prompt)
-        else:
-            print('я вас не понял')
+                print('я вас не понял')
+chat()
