@@ -6,7 +6,18 @@ import json
 import pyaudio
 from vosk import Model, KaldiRecognizer
 import time
+import pyautogui as pag
+import requests
 
+
+def weather(city_name):
+    api_key = "4d3976c583aeef24ef9481dc24dc48c5"
+    base_url = "http://api.openweathermap.org/data/2.5/weather?"
+    complete_url = base_url + "appid=" + 'd850f7f52bf19300a9eb4b0aa6b80f0d' + "&q=" + city_name
+    response = requests.get(complete_url)
+    x = response.json()
+    print(x['weather'])
+chhat = 0
 debug = 0  # set 1 to turn on debug
 DataBaseSQL3inCode = sqlite3.connect("DataBaseInFiles")  # connect Data Base
 cursor = DataBaseSQL3inCode.cursor()  # create cursor
@@ -27,6 +38,7 @@ rec = KaldiRecognizer(model, 16000)
 p = pyaudio.PyAudio()
 stream = p.open(format = pyaudio.paInt16, channels = 1, rate = 16000, input = True, frames_per_buffer = 8000)
 stream.start_stream()
+
 def listen():
     while True:
         data = stream.read(4000, exception_on_overflow = False)
@@ -39,7 +51,7 @@ def per_com(list1,
     common_elements = set(list1) & set(list2)
     percent_match = (len(common_elements) / len(set(list1 + list2))) * 100
     return percent_match
-def recp(prompt):
+def recp(prompt, chhat):
     pers = []
     pr = prompt
     pr = pr.lower()  # pr = re.sub('\W+',' ', pr )
@@ -55,9 +67,10 @@ def recp(prompt):
             otvet_polzovatelya = text
             if text != '':
                 print(text)
-        cursor.execute(f"INSERT INTO AnsvQest VALUES ('{prompt}', '{otvet_polzovatelya}')")
-        DataBaseSQL3inCode.commit()
-        db.append([prompt, otvet_polzovatelya])
+                cursor.execute(f"INSERT INTO AnsvQest VALUES ('{prompt}', '{otvet_polzovatelya}')")
+                DataBaseSQL3inCode.commit()
+                db.append([prompt, otvet_polzovatelya])
+                chat(chhat)
     else:
         print('Ответ бота:')
         a = sortPers[-1][1]
@@ -86,7 +99,7 @@ def recp(prompt):
                                 )
                                 DataBaseSQL3inCode.commit()
                                 db.append([prompt, text])
-                                chat()
+                                chat(chhat)
                         # print(db)
                     elif text.lower() == 'да\n':
                         cursor.execute(f"INSERT INTO AnsvQest VALUES ('"
@@ -94,29 +107,51 @@ def recp(prompt):
                                        f"'{sortPers[-1][1]}')")
                         DataBaseSQL3inCode.commit()
                         db.append([prompt, sortPers[-1][1]])
-                        chat()
+                        chat(chhat)
 
-
+print('говорите\n')
 def chat(chhat = 0):
+    compleat = ['готово кмдр!\n', 'готово CMDR!\n', 'рад помочь!\n', 'держи!\n', 'лови!\n', 'compleat!\n', 'есть, сер!!!\n', 'вот держите, сер!\n', 'включаю\n', 'на\n', 'выполняю\n']
     while True:
-        print('говорите')
         for text in listen():
             prompt = text
 
             if prompt == '':
-                pass
+                chat(chhat)
+            elif prompt in ['погода', 'какая температура']:
+                city_name = 'воронеж'
+                weather(city_name)
             elif prompt in ['режим игры', 'игры']:
                 print(prompt)
                 print('выберите игру [elite dangerous]')
                 for text in listen():
-                    if text in ['элитная опастность', 'элитной опасностью', 'элитное опасность', 'опасности', 'элитной опасность']:
+                    if text in ['элитная опастность', 'элитной опасностью', 'элитное опасность', 'опасности', 'элитной опасность', 'элита']:
                         print(text)
                         print('включаю')
-                        #buttons
-                    elif text == 'назад':
-                        print(text)
-                        pass
-
+                        while True:
+                            print('\n')
+                            #buttonsa
+                            for text in listen():
+                                if text == 'назад':
+                                    print(text)
+                                    chat(chhat)
+                                elif text in ['соло', 'одиночная', 'одиночную']:
+                                    pag.moveTo(500, 500, 0.5)
+                                    pag.leftClick()
+                                    pag.moveTo(1300, 800, 0.5)
+                                    time.sleep(1)
+                                    pag.leftClick()
+                                    print(random.choice(compleat))
+                                elif text in ['на главный экран', 'меню', 'на базу']:
+                                    print(random.choice(compleat))
+                                    pag.press('esc')
+                                    for i in range(5):
+                                        pag.press('down')
+                                    pag.press('Enter')
+                                elif text == 'полная тяга':
+                                    pag.write('wwwwwwwwwwwwwwwwwwwww')
+                                else:
+                                    print('я вас не понял')
             elif prompt == 'exit' or prompt == 'выход':
                 print(prompt)
                 if debug == 1:
@@ -146,36 +181,37 @@ def chat(chhat = 0):
                         print(db[h])
             elif prompt == 'что ты умеешь':
                 print(prompt)
-                print('я умею отвечать на вопросы и постоянно обучаюсь, но не поддерживаю режим диалога. Мои программисты под контролем Прядиева Романа, очень стараются для продвижения проекта, и постоянно его поддерживают. Если вам угодно, вы можете обновить программу(https://github.com/iLLokMaster/chatBOT)')
+                print('я умею отвечать на вопросы и постоянно обучаюсь, но не поддерживаю режим диалога. Мои программисты под контролем Прядиева Романа, очень стараются для продвижения проекта, и постоянно его поддерживают. Если вам угодно, вы можете обновить программу(https://github.com/iLLokMaster/chatBOT)\n')
             elif prompt in ['открой браузер', 'браузер']:
                 print(prompt)
                 os.system('C:/Users/B-ZONE/AppData/Local/Yandex/YandexBrowser/Application/browser.exe')
-                print('на')
+                print(random.choice(compleat))
             elif prompt in ['домашняя работа', 'домашнюю работу']:
                 print(prompt)
                 webbrowser.open('https://dnevnik.ru/marks/school/1000009993521/student/1000012990748/current', new = 2)
-                print('держи')
-            elif prompt == 'открой игры':
+                print(random.choice(compleat))
+            elif prompt in ['открой игры', 'стил', 'стим']:
                 print(prompt)
-                os.system('C:/Program Files (x86)/Steam/Steam.exe')
-                print('на')
+                os.system('C:/steeeem/steam.exe.lnk')
+                print(random.choice(compleat))
             elif prompt in ['телеграм', 'телеграмм']:
                 print(text)
-                print('открываю')
-                webbrowser.open('https://web.telegram.org/', new = 2)
-            elif prompt in ['чат', 'общение', 'к общению', 'в общении']:
-                print('чат активирован')
+                print(random.choice(compleat))
+                os.system('C:/steeeem/Telegram.exe.lnk')
+                recp(prompt, chhat)
+            elif prompt in ['чат', 'общение', 'к общению', 'в общении', 'режим чата']:
+                print('чат активирован\n')
                 chhat = 1
             elif prompt in ['закрой чат', 'хватит общаться']:
-                print('выключаю...')
+                print('выключаю...\n')
                 chhat = 0
             elif prompt in ['видео', 'я хочу посмотреть видео']:
                 webbrowser.open('https://www.youtube.com/', new = 2)
 
             elif chhat == 1:
                 print(prompt)
-                recp(prompt)
+                recp(prompt, chhat)
             else:
                 print(text)
-                print('я вас не понял')
-chat()
+                print('я вас не понял\n')
+chat(chhat)
