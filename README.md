@@ -13,6 +13,9 @@
     pip3 install SpeechRecognition
     pip3 install pyaudio
     pip3 install vosk
+    pip3 install requests
+    pip3 install pyautogui 
+    pip3 install KaldiRecognizer 
 
 https://docs.python.org/3/library/sqlite3.html
 
