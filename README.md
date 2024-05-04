@@ -18,12 +18,19 @@
     pip3 install KaldiRecognizer 
     
 https://docs.python.org/3/library/sqlite3.html
+
 https://docs.python.org/3/library/re.html
+
 https://pypi.org/project/SpeechRecognition/
+
 https://github.com/sveinse/pyaudio
+
 https://github.com/alphacep/vosk-api
+
 https://github.com/MatteoBartoli03/requestsPython
+
 https://pyautogui.readthedocs.io/en/latest/
+
 https://github.com/pykaldi/pykaldi
     
 Для обычных пользователей бета версии/For regular beta users
