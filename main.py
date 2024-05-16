@@ -3,21 +3,38 @@ import os
 import random
 import webbrowser
 import json
+import keyboard
 import pyaudio
 from vosk import Model, KaldiRecognizer
 import time
 import pyautogui as pag
 import requests
+import pyttsx3
 
 
-def weather(city_name):
+
+#os.system('form.exe')
+
+# Создание объекта для синтеза речи
+SayPhrasesEngine = pyttsx3.init()
+# Установка параметров речи (необязательно)
+SayPhrasesEngine.setProperty('rate', 150)    # Скорость речи
+SayPhrasesEngine.setProperty('volume', 0.9)  # Громкость речи
+voices = SayPhrasesEngine.getProperty('voices')
+SayPhrasesEngine.setProperty('voice', voices[0].id)
+
+SayPhrasesEngine.say('привет, это ваш ассистент, я загружаюсь, ожидайте!')
+SayPhrasesEngine.runAndWait()
+def weather(city_name, text):
     api_key = "4d3976c583aeef24ef9481dc24dc48c5"
     base_url = "http://api.openweathermap.org/data/2.5/weather?"
     complete_url = base_url + "appid=" + 'd850f7f52bf19300a9eb4b0aa6b80f0d' + "&q=" + city_name
     response = requests.get(complete_url)
     x = response.json()
     print(x['weather'])
-chhat = 0
+    text = text.replace(' ', '+')
+    webbrowser.open(f"https://yandex.ru/search/?text={text}&clid=2270455&banerid=6301000000%3A65808155b2635984727c6729&win=606&lr=193")
+chatMode = 0
 debug = 0  # set 1 to turn on debug
 DataBaseSQL3inCode = sqlite3.connect("DataBaseInFiles")  # connect Data Base
 cursor = DataBaseSQL3inCode.cursor()  # create cursor
@@ -52,17 +69,16 @@ def per_com(list1,
     percent_match = (len(common_elements) / len(set(list1 + list2))) * 100
     return percent_match
 def recp(prompt, chhat):
-    pers = []
-    pr = prompt
-    pr = pr.lower()  # pr = re.sub('\W+',' ', pr )
+    persentageOfMatch = []
+    prompt = prompt.lower()  # pr = re.sub('\W+',' ', pr )
     for k in range(len(db)):
-        list_a = pr
-        list_b = db[k][0]  # list_b = re.sub('\W+',' ', db[k][0] )
-        result = per_com(list_a, list_b)  ###result = проценты совпадения
-        pers.append([result, db[k][1]])
-    sortPers = sorted(pers)
-    if result == 0:
+        resultOfPercentage = per_com(prompt, db[k][0])  ###result = проценты совпадения
+        persentageOfMatch.append([resultOfPercentage, db[k][1]])
+    sortPers = sorted(persentageOfMatch)
+    if resultOfPercentage == 0:
         print('Я вас не понял. Скажите ответ на ваш вопрос.(\n')
+        SayPhrasesEngine.say('Я вас не понял. Скажите ответ на ваш вопрос.')
+        SayPhrasesEngine.runAndWait()
         for text in listen():
             otvet_polzovatelya = text
             if text != '':
@@ -78,9 +94,14 @@ def recp(prompt, chhat):
         for alphabet in b:
             print(alphabet, end = '')
             time.sleep(0.01)
+
+        SayPhrasesEngine.say(a)
+        SayPhrasesEngine.runAndWait()
         print('\n')
         if sortPers[-1][0] != 100:
             print('вам понравился ответ?[да][нет]')
+            SayPhrasesEngine.say('вам понравился ответ?')
+            SayPhrasesEngine.runAndWait()
 
             for text in listen():
                 if text != '':
@@ -88,6 +109,8 @@ def recp(prompt, chhat):
 
                     if text.lower() == 'нет':
                         print('ваш вариант ответа')
+                        SayPhrasesEngine.say('ваш вариант ответа')
+                        SayPhrasesEngine.runAndWait()
                         for text in listen():
                             if text != '':
                                 print(text)
@@ -101,33 +124,43 @@ def recp(prompt, chhat):
                                 db.append([prompt, text])
                                 chat(chhat)
                         # print(db)
-                    elif text.lower() == 'да\n':
+                    elif text.lower() == 'да':
                         cursor.execute(f"INSERT INTO AnsvQest VALUES ('"
                                        f"{prompt}', "
                                        f"'{sortPers[-1][1]}')")
                         DataBaseSQL3inCode.commit()
                         db.append([prompt, sortPers[-1][1]])
                         chat(chhat)
-
 print('говорите\n')
+
+
+# Синтез речи
+SayPhrasesEngine.say('говорите')
+SayPhrasesEngine.runAndWait()
+
 def chat(chhat = 0):
-    compleat = ['готово кмдр!\n', 'готово CMDR!\n', 'рад помочь!\n', 'держи!\n', 'лови!\n', 'compleat!\n', 'есть, сер!!!\n', 'вот держите, сер!\n', 'включаю\n', 'на\n', 'выполняю\n']
+    compleat = ['готово кмдр!\n', 'готово CMDR!\n', 'рад помочь!\n', 'держи!\n', 'лови!\n', 'compleat!\n', 'есть, сер!!!\n', 'вот держите, сер!\n', 'включаю\n', 'на\n', 'выполняю\n', 'сер, да, сер\n']
     while True:
         for text in listen():
-            prompt = text
-
-            if prompt == '':
+            if text == '':
                 chat(chhat)
-            elif prompt in ['погода', 'какая температура']:
+            elif 'какая погода в' in text:
+                print(text)
                 city_name = 'воронеж'
-                weather(city_name)
-            elif prompt in ['режим игры', 'игры']:
-                print(prompt)
+                weather(city_name, text)
+
+            elif text in ['режим игры', 'игры']:
+                print(text)
                 print('выберите игру [elite dangerous]')
+                SayPhrasesEngine.say('выберите игру')
+                SayPhrasesEngine.runAndWait()
+
                 for text in listen():
                     if text in ['элитная опастность', 'элитной опасностью', 'элитное опасность', 'опасности', 'элитной опасность', 'элита']:
                         print(text)
                         print('включаю')
+                        SayPhrasesEngine.say('включаю')
+                        SayPhrasesEngine.runAndWait()
                         while True:
                             print('\n')
                             #buttonsa
@@ -135,25 +168,113 @@ def chat(chhat = 0):
                                 if text == 'назад':
                                     print(text)
                                     chat(chhat)
+                                elif text == '':
+                                    pass
                                 elif text in ['соло', 'одиночная', 'одиночную']:
                                     pag.moveTo(500, 500, 0.5)
                                     pag.leftClick()
                                     pag.moveTo(1300, 800, 0.5)
                                     time.sleep(1)
-                                    pag.leftClick()
+                                    keyboard.press('enter')
+                                    time.sleep(0.1)
+                                    keyboard.release('enter')
+                                    print(text)
                                     print(random.choice(compleat))
+                                    SayPhrasesEngine.say(random.choice(compleat))
+                                    SayPhrasesEngine.runAndWait()
                                 elif text in ['на главный экран', 'меню', 'на базу']:
                                     print(random.choice(compleat))
-                                    pag.press('esc')
-                                    for i in range(5):
-                                        pag.press('down')
-                                    pag.press('Enter')
+                                    keyboard.press('esc')
+                                    keyboard.release('esc')
+                                    pag.moveTo(250, 830, 1)
+                                    time.sleep(0.1)
+                                    keyboard.press('Enter')
+                                    time.sleep(0.1)
+                                    keyboard.release('enter')
+                                    time.sleep(0.1)
+                                    keyboard.press('Enter')
+                                    time.sleep(0.1)
+                                    keyboard.release('enter')
+                                    SayPhrasesEngine.say(random.choice(compleat))
+                                    SayPhrasesEngine.runAndWait()
                                 elif text == 'полная тяга':
-                                    pag.write('wwwwwwwwwwwwwwwwwwwww')
+                                    keyboard.press('w')
+                                    time.sleep(4)
+                                    keyboard.release('w')
+                                    print(text)
+                                    print(random.choice(compleat))
+                                    SayPhrasesEngine.say(random.choice(compleat))
+                                    SayPhrasesEngine.runAndWait()
+                                elif text == 'стоп':
+                                    keyboard.press('x')
+                                    time.sleep(0.1)
+                                    keyboard.release('x')
+                                    print(text)
+                                    print(random.choice(compleat))
+                                    SayPhrasesEngine.say(random.choice(compleat))
+                                    SayPhrasesEngine.runAndWait()
+                                elif text in ['прыжок']:
+                                    keyboard.press('j')
+                                    time.sleep(0.5)
+                                    keyboard.release('j')
+                                    print(text)
+                                    print(random.choice(compleat))
+                                    SayPhrasesEngine.say(random.choice(compleat))
+                                    SayPhrasesEngine.runAndWait()
+                                elif text in ['карта галактики']:
+                                    keyboard.press('5')
+                                    time.sleep(0.1)
+                                    keyboard.release('5')
+                                    print(text)
+                                    print(random.choice(compleat))
+                                    SayPhrasesEngine.say(random.choice(compleat))
+                                    SayPhrasesEngine.runAndWait()
+                                elif text in ['картер система', 'карты системах', 'карта системы', 'карты системы','карты системы', 'карту систему', 'карту системы']:
+                                    keyboard.press('6')
+                                    time.sleep(0.1)
+                                    keyboard.release('6')
+                                    print(text)
+                                    print(random.choice(compleat))
+                                    SayPhrasesEngine.say(random.choice(compleat))
+                                    SayPhrasesEngine.runAndWait()
+                                elif text in ['в игру', 'к игре', 'продолжить', 'продолжим']:
+                                    keyboard.press('backspace')
+                                    time.sleep(0.1)
+                                    keyboard.release('backspace')
+                                    print(text)
+                                    print(random.choice(compleat))
+                                    SayPhrasesEngine.say(random.choice(compleat))
+                                    SayPhrasesEngine.runAndWait()
+                                elif text in ['сканер системы', 'сканера систем', 'сканер систем', 'сканер система']:
+                                    keyboard.press("'")
+                                    time.sleep(0.1)
+                                    keyboard.release("'")
+                                    print(text)
+                                    print(random.choice(compleat))
+                                    SayPhrasesEngine.say(random.choice(compleat))
+                                    SayPhrasesEngine.runAndWait()
+                                elif text in ['гнезда']:
+                                    keyboard.press('u')
+                                    time.sleep(0.1)
+                                    keyboard.release('u')
+                                    SayPhrasesEngine.say(random.choice(compleat))
+                                    SayPhrasesEngine.runAndWait()
+                                elif text in ['шасси']:
+                                    keyboard.press('l')
+                                    time.sleep(0.1)
+                                    keyboard.release('l')
+                                    SayPhrasesEngine.say(random.choice(compleat))
+                                    SayPhrasesEngine.runAndWait()
                                 else:
+                                    print(text)
                                     print('я вас не понял')
-            elif prompt == 'exit' or prompt == 'выход':
-                print(prompt)
+                    elif text == 'назад':
+                        print(text)
+                        SayPhrasesEngine.say(random.choice(compleat))
+                        SayPhrasesEngine.runAndWait()
+                        chat(chhat)
+            elif text == 'exit' or text == 'выход':
+                print(text)
                 if debug == 1:
                     print('     сохраняем изменения в базе')
                 if debug == 1:
@@ -170,48 +291,75 @@ def chat(chhat = 0):
                     'не оставляйте меня одного на долго', 'нееееееее...',
                     'не оставляй меня на долго, пожалуйста, я очень тебя прошу'
                 ]
-                print(good_by[random.randint(0, len(good_by) - 1)])
+                print(random.choice(good_by))
+                SayPhrasesEngine.say(random.choice(good_by))
+                SayPhrasesEngine.runAndWait()
                 exit()
             #elif prompt in ['заметки', 'идеи']:
 
-            elif prompt in['db', 'ви', 'data base', 'your data base', 'твоя база данных', 'база данных']:
-                print(prompt)
+            elif text in['db', 'ви', 'data base', 'your data base', 'твоя база данных', 'база данных']:
+                print(text)
                 if debug == 1:
                     for h in range(len(db)):
                         print(db[h])
-            elif prompt == 'что ты умеешь':
-                print(prompt)
+            elif text == 'что ты умеешь':
+                print(text)
                 print('я умею отвечать на вопросы и постоянно обучаюсь, но не поддерживаю режим диалога. Мои программисты под контролем Прядиева Романа, очень стараются для продвижения проекта, и постоянно его поддерживают. Если вам угодно, вы можете обновить программу(https://github.com/iLLokMaster/chatBOT)\n')
-            elif prompt in ['открой браузер', 'браузер']:
-                print(prompt)
+                SayPhrasesEngine.say('я умею отвечать на вопросы и постоянно обучаюсь, но не поддерживаю режим диалога. Мои программисты под контролем Прядиева Романа, очень стараются для продвижения проекта, и постоянно его поддерживают. Если вам угодно, вы можете обновить программу')
+                SayPhrasesEngine.runAndWait()
+            elif text in ['открой браузер', 'браузер']:
+                print(text)
                 os.system('C:/Users/B-ZONE/AppData/Local/Yandex/YandexBrowser/Application/browser.exe')
                 print(random.choice(compleat))
-            elif prompt in ['домашняя работа', 'домашнюю работу']:
-                print(prompt)
+                SayPhrasesEngine.say(random.choice(compleat))
+                SayPhrasesEngine.runAndWait()
+            elif text in ['домашняя работа', 'домашнюю работу']:
+                print(text)
                 webbrowser.open('https://dnevnik.ru/marks/school/1000009993521/student/1000012990748/current', new = 2)
                 print(random.choice(compleat))
-            elif prompt in ['открой игры', 'стил', 'стим']:
-                print(prompt)
-                os.system('C:/steeeem/steam.exe.lnk')
-                print(random.choice(compleat))
-            elif prompt in ['телеграм', 'телеграмм']:
+                SayPhrasesEngine.say(random.choice(compleat))
+                SayPhrasesEngine.runAndWait()
+            elif text in ['открой игры', 'стил', 'стим', 'тим', 'стин']:
                 print(text)
                 print(random.choice(compleat))
+                SayPhrasesEngine.say(random.choice(compleat))
+                SayPhrasesEngine.runAndWait()
+                os.system('C:/steeeem/steam.exe.lnk')
+                chat(chhat)
+            elif text in ['телеграм', 'телеграмм']:
+                print(text)
+                print(random.choice(compleat))
+                SayPhrasesEngine.say(random.choice(compleat))
+                SayPhrasesEngine.runAndWait()
                 os.system('C:/steeeem/Telegram.exe.lnk')
-                recp(prompt, chhat)
-            elif prompt in ['чат', 'общение', 'к общению', 'в общении', 'режим чата']:
+                recp(text, chhat)
+            elif text in ['чат', 'общение', 'к общению', 'в общении', 'режим чата', 'режим общения']:
                 print('чат активирован\n')
+                SayPhrasesEngine.say(random.choice('чат активирован'))
+                SayPhrasesEngine.runAndWait()
                 chhat = 1
-            elif prompt in ['закрой чат', 'хватит общаться']:
+            elif text in ['закрой чат', 'хватит общаться']:
                 print('выключаю...\n')
                 chhat = 0
-            elif prompt in ['видео', 'я хочу посмотреть видео']:
+                print(random.choice(compleat))
+                SayPhrasesEngine.say(random.choice(compleat))
+                SayPhrasesEngine.runAndWait()
+            elif text in ['видео', 'я хочу посмотреть видео']:
                 webbrowser.open('https://www.youtube.com/', new = 2)
-
+                print(random.choice(compleat))
+                SayPhrasesEngine.say(random.choice(compleat))
+                SayPhrasesEngine.runAndWait()
+            elif text in ['эскорт', 'дискомфорт', 'дискурс', 'дискурса']:
+                os.system('C:/steeeem/disc.exe.lnk')
+                print(random.choice(compleat))
+                SayPhrasesEngine.say(random.choice(compleat))
+                SayPhrasesEngine.runAndWait()
             elif chhat == 1:
-                print(prompt)
-                recp(prompt, chhat)
+                print(text)
+                recp(text, chhat)
             else:
                 print(text)
                 print('я вас не понял\n')
-chat(chhat)
+
+
+chat(chatMode)
