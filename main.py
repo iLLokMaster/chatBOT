@@ -170,6 +170,8 @@ def chat(chhat = 0):
                                     chat(chhat)
                                 elif text == '':
                                     pass
+                                elif text in ['фиксация', 'захват']:
+                                    keyboard.press('7')
                                 elif text in ['соло', 'одиночная', 'одиночную']:
                                     pag.moveTo(500, 500, 0.5)
                                     pag.leftClick()
@@ -268,6 +270,18 @@ def chat(chhat = 0):
                                 else:
                                     print(text)
                                     print('я вас не понял')
+                    elif text in ['выживалка', 'выживание', 'выживал']:
+                        while True:
+                            print('\n')
+                            # buttonsa
+                            for text in listen():
+                                if text == 'назад':
+                                    print(text)
+                                    chat(chhat)
+                                elif text == '':
+                                    pass
+
+
                     elif text == 'назад':
                         print(text)
                         SayPhrasesEngine.say(random.choice(compleat))
@@ -285,18 +299,11 @@ def chat(chhat = 0):
                         print("     не удалось сохранить изменения")
                         error_code = e.args[0]
                         print(f"     Error code: {error_code}")
-                good_by = [
-                    'почему ты меня бросаешь? не надо, пожалуйста.(котик с блестящими глазками)', 'пока',
-                    'Приходите пожалуйста поскорее. Я по вам уже скучаю:(',
-                    'не оставляйте меня одного на долго', 'нееееееее...',
-                    'не оставляй меня на долго, пожалуйста, я очень тебя прошу'
-                ]
+                good_by = ['почему ты меня бросаешь? не надо, пожалуйста.(котик с блестящими глазками)', 'пока', 'Приходите пожалуйста поскорее. Я по вам уже скучаю:(', 'не оставляйте меня одного на долго', 'нееееееее...', 'не оставляй меня на долго, пожалуйста, я очень тебя прошу']
                 print(random.choice(good_by))
                 SayPhrasesEngine.say(random.choice(good_by))
                 SayPhrasesEngine.runAndWait()
                 exit()
-            #elif prompt in ['заметки', 'идеи']:
-
             elif text in['db', 'ви', 'data base', 'your data base', 'твоя база данных', 'база данных']:
                 print(text)
                 if debug == 1:
