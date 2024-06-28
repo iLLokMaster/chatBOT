@@ -50,12 +50,11 @@ except sqlite3.Error:
 db = cursor.execute("SELECT * FROM AnsvQest").fetchall()  ###select all from Data Base and insert to db
 DataBaseSQL3inCode.commit()  ###commit changes and cloce Data Base
 
-model = Model('models/model')
+model = Model('models/vosk-model-ru-0.42')
 rec = KaldiRecognizer(model, 16000)
 p = pyaudio.PyAudio()
 stream = p.open(format = pyaudio.paInt16, channels = 1, rate = 16000, input = True, frames_per_buffer = 8000)
 stream.start_stream()
-
 def listen():
     while True:
         data = stream.read(4000, exception_on_overflow = False)
@@ -340,7 +339,7 @@ def chat(chhat = 0):
                 SayPhrasesEngine.runAndWait()
                 os.system('C:/steeeem/Telegram.exe.lnk')
                 recp(text, chhat)
-            elif text in ['чат', 'общение', 'к общению', 'в общении', 'режим чата', 'режим общения']:
+            elif text in ['чат', 'общение', 'к общению', 'в общении', 'режим чата', 'режим общения', 'режим счетов']:
                 print('чат активирован\n')
                 SayPhrasesEngine.say(random.choice('чат активирован'))
                 SayPhrasesEngine.runAndWait()
@@ -367,6 +366,5 @@ def chat(chhat = 0):
             else:
                 print(text)
                 print('я вас не понял\n')
-
 
 chat(chatMode)
