@@ -35,6 +35,9 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
   <property name="tabShape">
    <enum>QTabWidget::Rounded</enum>
   </property>
@@ -171,29 +174,24 @@ p, li { white-space: pre-wrap; }
      <widget class="QTabWidget" name="tabWidget_2">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>10</x>
         <y>0</y>
         <width>451</width>
-        <height>861</height>
+        <height>821</height>
        </rect>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_3">
        <attribute name="title">
         <string>Классические</string>
        </attribute>
-      </widget>
-      <widget class="QWidget" name="tab_4">
-       <attribute name="title">
-        <string>Для уверенного пользователя!</string>
-       </attribute>
        <widget class="QCheckBox" name="checkBox_debug">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>0</y>
+          <x>0</x>
+          <y>10</y>
           <width>171</width>
           <height>21</height>
          </rect>
@@ -202,12 +200,98 @@ p, li { white-space: pre-wrap; }
          <string>debug mode</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="lineEdit_wayS2T">
+       <widget class="QCheckBox" name="checkBox_make_answer">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>40</y>
+          <width>241</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>воспринимать вопросы</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_do_comands">
         <property name="geometry">
          <rect>
           <x>0</x>
           <y>70</y>
-          <width>451</width>
+          <width>221</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>реагировать на команды</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_study">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>100</y>
+          <width>301</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>обучение ИИ</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_sity">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>180</y>
+          <width>441</width>
+          <height>20</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_3">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>140</y>
+          <width>431</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>ваш город проживания. </string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_4">
+        <property name="geometry">
+         <rect>
+          <x>6</x>
+          <y>160</y>
+          <width>431</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Это необходимо для работы прогноза погоды</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_4">
+       <attribute name="title">
+        <string>Для уверенного пользователя!</string>
+       </attribute>
+       <widget class="QLineEdit" name="lineEdit_wayS2T">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>30</y>
+          <width>441</width>
           <height>20</height>
          </rect>
         </property>
@@ -216,7 +300,7 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>50</y>
+          <y>10</y>
           <width>341</width>
           <height>20</height>
          </rect>
@@ -225,27 +309,17 @@ p, li { white-space: pre-wrap; }
          <string>Путь к своей моделе распозноваия речи</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label_3">
+       <widget class="QPushButton" name="pushButtonAply">
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>110</y>
-          <width>451</width>
-          <height>20</height>
+          <y>810</y>
+          <width>441</width>
+          <height>23</height>
          </rect>
         </property>
         <property name="text">
-         <string>Путь к своей моделе синтеза речи</string>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="lineEdit_wayT2S">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>130</y>
-          <width>431</width>
-          <height>20</height>
-         </rect>
+         <string>применить настройки</string>
         </property>
        </widget>
       </widget>
@@ -261,6 +335,19 @@ p, li { white-space: pre-wrap; }
       </property>
       <property name="text">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:6pt;&quot;&gt;Вы можете подписаться на обновления &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:6pt;&quot;&gt;или обновиться по кнопке!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButtonAply_2">
+      <property name="geometry">
+       <rect>
+        <x>14</x>
+        <y>840</y>
+        <width>441</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>применить настройки</string>
       </property>
      </widget>
     </widget>
