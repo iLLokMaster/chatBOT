@@ -8,14 +8,7 @@
 
 установка библиотек/install librares
 -
-    pip install sqlite3
-    pip install re
-    pip3 install SpeechRecognition
-    pip3 install pyaudio
-    pip3 install vosk
-    pip3 install requests
-    pip3 install pyautogui 
-    pip3 install KaldiRecognizer 
+    pip3 install asttokens attrs backcall beautifulsoup4 bleach certifi cffi charset-normalizer colorama decorator defusedxml docopt executing fastjsonschema idna ipthon jedi Jinja2 jsonschema jsonschema-specifications jupyter_client jupyter_core jupyterlab_pygments MarkupSafe matplotlib-inline mistune nbclient nbconvert nbformat packaging pandocfilters parso pickleshare pipreqs platformdirs prompt_toolkit pure_eval PyAudio pycparser Pygments PyQt5 PyQt5-Qt5 PyQt5-sip python-dateutil pywin32 pyzmq referencing requests rpds-py srt stack-data tinycss2 tornado tqdm traitlets typing_extensions urllib3 vosk wcwidth webencodings websockets yarg
     
 https://docs.python.org/3/library/sqlite3.html
 
