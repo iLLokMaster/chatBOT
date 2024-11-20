@@ -455,6 +455,7 @@ class ChatBot(QMainWindow):
         if self.text == "None_pole":
             self.chat(self)
         else:
+            last_user_input = self.text
             persentage_of_match = []
             self.text = self.text.lower()  # pr = re.sub('\W+',' ', pr )
             for k in range(len(db)):
@@ -469,7 +470,7 @@ class ChatBot(QMainWindow):
                         otvet_polzovatelya = self.text
                         if self.text != '':
                             self.say_and_print(user_text = self.text)
-                            cursor.execute(f"INSERT INTO AnsvQest VALUES ('{self.text}', '{otvet_polzovatelya}')")
+                            cursor.execute(f"INSERT INTO AnsvQest VALUES ('{self.text}', '{sort_pers[-1][1]}')")
                             data_base_sql3in_code.commit()
                             db.append([self.text, otvet_polzovatelya])
                             self.chat(self)
@@ -489,7 +490,7 @@ class ChatBot(QMainWindow):
                                             self.say_and_print(user_text = self.text)
                                             cursor.execute(
                                                 f"INSERT INTO AnsvQest VALUES ('"
-                                                f"{self.text}', "
+                                                f"{last_user_input}', "
                                                 f"'{self.text}')"
                                             )
                                             data_base_sql3in_code.commit()
