@@ -26,7 +26,7 @@ class ChatBot(QMainWindow):
             self.debug = False
             self.make_answer = True
             self.do_commands = True
-            self.study = False
+            self.study = True  # False изначально
             self.chat()
 
     def initUI(self):  # создание формы
@@ -134,7 +134,8 @@ class ChatBot(QMainWindow):
             if phrase:
                 self.textEdit.setPlainText(f'{now_on_text_edit}\n Собеседник: {phrase} {phrase_that_not_sayed}')
         except Exception as E:
-            print(E)
+            if self.debug:
+                print(E)
             if user_text:
                 print('Вы: ', user_text)
             if phrase:
@@ -288,33 +289,34 @@ class ChatBot(QMainWindow):
                         self.say_and_print(user_text = self.text, phrase = random.choice(compleat))
                         self.chat(self)
         elif self.text in 'пиши под диктовку':
+            self.say_and_print(user_text = self.text, phrase = 'слушаю вас. говорите.')
             while True:
                 for self.text in self.listen():
                     if self.text == '':
                         pass
                     elif self.text == 'назад' or self.text == 'хватит':
+                        self.say_and_print(user_text = self.text, phrase = 'заканчиваем!')
                         self.chat()
                     elif self.text == 'ентер' or self.text == 'энтер':
-                        keyboard.press('Enter')
+                        keyboard.write('Enter')
                     elif self.text == 'запятая':
-                        keyboard.press(',')
+                        keyboard.write(',')
                     elif self.text == 'точка':
-                        keyboard.press('.')
+                        keyboard.write('.')
                     elif self.text == 'открытая скобка':
-                        keyboard.press('(')
+                        keyboard.write('(')
                     elif self.text == 'закрытая скобка':
-                        keyboard.press(')')
+                        keyboard.write(')')
                     elif self.text == 'двоеточие':
-                        keyboard.press(':')
+                        keyboard.write(':')
                     elif self.text == 'троеточие':
-                        keyboard.press('...')
+                        keyboard.write('...')
                     elif self.text == 'восклецательный знак':
-                        keyboard.press('!')
+                        keyboard.write('!')
                     elif self.text == 'вопросительный знак':
-                        keyboard.press('?')
+                        keyboard.write('?')
                     else:
                         keyboard.write(self.text)
-
         elif self.text == 'exit' or self.text == 'выход':
             if self.do_commands:
                 if self.debug:
@@ -351,6 +353,9 @@ class ChatBot(QMainWindow):
                 self.say_and_print(user_text = self.text, phrase = what_can_i_do,
                                    phrase_that_not_sayed = ' (https://github.com/iLLokMaster/chatBOT)')
                 self.chat(self)
+        elif self.text == 'режим обучения':
+            self.study = not self.study
+            self.chat()
         elif self.text in ['открой браузер', 'браузер']:
             if self.do_commands:
                 os.system('C:/Users/B-ZONE/AppData/Local/Yandex/YandexBrowser/Application/browser.exe')
