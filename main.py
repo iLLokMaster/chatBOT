@@ -470,9 +470,9 @@ class ChatBot(QMainWindow):
                         otvet_polzovatelya = self.text
                         if self.text != '':
                             self.say_and_print(user_text = self.text)
-                            cursor.execute(f"INSERT INTO AnsvQest VALUES ('{self.text}', '{sort_pers[-1][1]}')")
+                            cursor.execute(f"INSERT INTO AnsvQest VALUES ('{last_user_input}', '{otvet_polzovatelya}')")
                             data_base_sql3in_code.commit()
-                            db.append([self.text, otvet_polzovatelya])
+                            db.append([last_user_input, otvet_polzovatelya])
                             self.chat(self)
             else:
                 a = sort_pers[-1][1]
@@ -499,7 +499,7 @@ class ChatBot(QMainWindow):
                                 elif self.text.lower() == 'да':
                                     self.say_and_print(user_text = 'да')
                                     cursor.execute(f"INSERT INTO AnsvQest VALUES ('"
-                                                   f"{self.text}', "
+                                                   f"{last_user_input}', "
                                                    f"'{sort_pers[-1][1]}')")
                                     data_base_sql3in_code.commit()
                                     db.append([self.text, sort_pers[-1][1]])
