@@ -68,7 +68,7 @@ https://github.com/pykaldi/pykaldi
 
 ============================================================================================
 
-
+Eng:
 1)download the project, namely the DataBase In Files and main.py . Download python(https://www.python.org /) and (optionally) a development environment, for example PyCharm(https://www.jetbrains.com/pycharm/download/other.html ) I recommend a version no higher than 2023.2.5, newer versions are paid.
 
 2)Put the project files in one folder convenient for you.
@@ -184,11 +184,13 @@ print(db)
  
 ближайшие планы на проект/immediate plans for the project 
 -
+Ru:
 1)  Обеспечить поддержку режима диалога.
 2)  Реализовать функцию сохранения базы данных в облачном хранилище.
 3)  Обучить искусственный интеллект.
 4)  Организовать чтение данных из быстрых ответов Яндекса.
 
+Eng:
 1)  Provide support for the dialog mode.
 2)  Implement the function of saving the database to the cloud storage.
 3)  Train artificial intelligence.
