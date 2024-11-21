@@ -1,3 +1,5 @@
+https://docs.google.com/presentation/d/1QbgpwSHkX0T0qiBFiA5IJRv1VEkjGxnLVhoZK7vk56w/edit#slide=id.g3170a74bc6c_0_160
+
 ![iStock-927504604](https://github.com/iLLokMaster/chatBOT/assets/130349746/ae1d948f-3f1b-436c-9b82-bc62b59ee63b)
 для чего нужен этот проект?
 -
