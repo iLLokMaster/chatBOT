@@ -1,3 +1,4 @@
+import difflib
 import sqlite3
 import os
 import random
@@ -311,12 +312,12 @@ class ChatBot(QMainWindow):
                         keyboard.write(':')
                     elif self.text == 'троеточие':
                         keyboard.write('...')
-                    elif self.text == 'восклецательный знак':
+                    elif self.text == 'восклицательный знак':
                         keyboard.write('!')
                     elif self.text == 'вопросительный знак':
                         keyboard.write('?')
                     else:
-                        keyboard.write(self.text)
+                        keyboard.write(str(self.text).capitalize() + ' ')
         elif self.text == 'exit' or self.text == 'выход':
             if self.do_commands:
                 if self.debug:
@@ -387,7 +388,7 @@ class ChatBot(QMainWindow):
                 os.system('C:/steeeem/disc.exe.lnk')
                 self.say_and_print(user_text = self.text, phrase = random.choice(compleat))
                 self.chat(self)
-        elif self.text in ['github', 'гитхаб', 'гит хаб', 'git hub']:
+        elif self.text in ['github', 'гитхаб', 'гит хаб', 'git hub', 'открой гитхаб']:
             if self.do_commands:
                 webbrowser.open('https://github.com/iLLokMaster/chatBOT')
                 self.say_and_print(user_text = self.text, phrase = random.choice(compleat))
@@ -440,13 +441,21 @@ class ChatBot(QMainWindow):
             else:
                 self.chat()
 
-    def per_common(self, list2):
+    def per_common(self, str1, str2):
         """расчёт схожести эллемента из БД и запроса юзера с возвратом процентов схожести.
         Одна из функций вторичной обработки"""
-        list1 = self.text
-        common_elements = set(list1) & set(list2)
-        percent_match = (len(common_elements) / len(set(list1 + list2))) * 100
-        return percent_match
+        # Create a SequenceMatcher instance
+        seq_matcher = difflib.SequenceMatcher(None, str1, str2)
+        # Calculate the similarity ratio
+        similarity_ratio = seq_matcher.ratio()
+        # Convert the similarity ratio to a percentage
+        similarity_percentage = similarity_ratio * 100
+        return similarity_percentage
+
+        # list1 = self.text
+        # common_elements = set(list1) & set(list2)
+        # percent_match = (len(common_elements) / len(set(list1 + list2))) * 100
+        # return percent_match
 
     def recp(self):
         """Подбор ответа на вопрос пользователя, запись в базу данных неизвесного вопроса с новым ответом.
@@ -456,23 +465,23 @@ class ChatBot(QMainWindow):
             self.chat(self)
         else:
             last_user_input = self.text
-            persentage_of_match = []
+            table_answ_with_pers = []
             self.text = self.text.lower()  # pr = re.sub('\W+',' ', pr )
             for k in range(len(db)):
-                result_of_percentage = self.per_common(db[k][0])  # result = проценты совпадения
-                persentage_of_match.append([result_of_percentage, db[k][1]])
-            sort_pers = sorted(persentage_of_match)
+                result_of_percentage = self.per_common(self.text, db[k][0])  # result = проценты совпадения
+                table_answ_with_pers.append([result_of_percentage, db[k][1]])
+            sort_pers = sorted(table_answ_with_pers)
             if result_of_percentage == 0:
                 if self.study:
                     self.say_and_print(user_text = self.text, phrase = 'Я вас не понял. Скажите ответ на ваш вопрос.(',
                                        phrase_that_not_sayed = '')
                     for self.text in self.listen():
-                        otvet_polzovatelya = self.text
+                        user_answer = self.text.lower().capitalize()
                         if self.text != '':
                             self.say_and_print(user_text = self.text)
-                            cursor.execute(f"INSERT INTO AnsvQest VALUES ('{last_user_input}', '{otvet_polzovatelya}')")
+                            cursor.execute(f"INSERT INTO AnsvQest VALUES ('{last_user_input}', '{user_answer}')")
                             data_base_sql3in_code.commit()
-                            db.append([last_user_input, otvet_polzovatelya])
+                            db.append([last_user_input, user_answer])
                             self.chat(self)
             else:
                 a = sort_pers[-1][1]
