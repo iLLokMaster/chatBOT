@@ -115,7 +115,7 @@ class ChatBot(QMainWindow):
         file_city.close()
 
     def send_button(self):  # обработчик кнопки отправки сообщения
-        self.text = self.lineEdit.text()
+        # self.text = self.lineEdit.text()
         self.chat()
 
     def say_and_print(self, user_text, phrase = '', phrase_that_not_sayed = ''):
@@ -152,9 +152,8 @@ class ChatBot(QMainWindow):
                     'есть, сер!!!', 'вот держите, сер!', 'включаю', 'на', 'выполняю',
                     'сер, да, сер']
         if self.voice:
-            while True:
-                for self.text in self.listen():
-                    self.if_req_in_func(compleat)
+            for self.text in self.listen():
+                self.if_req_in_func(compleat)
         else:
             self.if_req_in_func(compleat)
 
@@ -198,7 +197,7 @@ class ChatBot(QMainWindow):
                                             webbrowser.open('https://lichess.org/')
                                             self.say_and_print(user_text = self.text, phrase = random.choice(compleat))
                                             self.chat(self)
-                                    elif self.text in ['поиск тесла', 'быстрые маршруты']:
+                                    elif self.text in ['поиск тесла', 'быстрые маршруты', 'поиск тёсла']:
                                         if self.do_commands:
                                             webbrowser.open('https://spansh.co.uk/bodies')
                                             self.say_and_print(user_text = self.text, phrase = random.choice(compleat))
@@ -243,14 +242,14 @@ class ChatBot(QMainWindow):
                                         time.sleep(0.5)
                                         keyboard.release('j')
                                         self.say_and_print(user_text = self.text, phrase = random.choice(compleat))
-                                    elif self.text in ['карты галактики', 'карта галактики']:
+                                    elif self.text in ['карты галактики', 'карта галактики', 'карту галактики']:
                                         keyboard.press('5')
                                         time.sleep(0.1)
                                         keyboard.release('5')
                                         self.say_and_print(user_text = self.text, phrase = random.choice(compleat))
                                     elif self.text in ['картер система', 'карты системах', 'карта системы',
                                                        'карты системы', 'карты системы', 'карту систему',
-                                                       'карту системы']:
+                                                       'карту системы', 'карты система', 'карта система']:
                                         keyboard.press('6')
                                         time.sleep(0.1)
                                         keyboard.release('6')
@@ -355,6 +354,7 @@ class ChatBot(QMainWindow):
                                    phrase_that_not_sayed = ' (https://github.com/iLLokMaster/chatBOT)')
                 self.chat(self)
         elif self.text == 'режим обучения':
+            self.say_and_print(user_text = self.text, phrase = 'переключаю')
             self.study = not self.study
             self.chat()
         elif self.text in ['открой браузер', 'браузер']:
@@ -471,6 +471,9 @@ class ChatBot(QMainWindow):
                 result_of_percentage = self.per_common(self.text, db[k][0])  # result = проценты совпадения
                 table_answ_with_pers.append([result_of_percentage, db[k][1]])
             sort_pers = sorted(table_answ_with_pers)
+            # баг, надо фиксить
+            # result_of_percentage проверяется только последнее значение из цикла,
+            # а надо максимально подхотящее из sort_pers
             if result_of_percentage == 0:
                 if self.study:
                     self.say_and_print(user_text = self.text, phrase = 'Я вас не понял. Скажите ответ на ваш вопрос.(',
@@ -488,7 +491,7 @@ class ChatBot(QMainWindow):
                 self.say_and_print(user_text = self.text, phrase = a)
                 if self.study:
                     if sort_pers[-1][0] != 100:
-                        self.say_and_print(user_text = self.text, phrase = 'вам понравился ответ?',
+                        self.say_and_print(user_text = '', phrase = 'вам понравился ответ?',
                                            phrase_that_not_sayed = '[да][нет]')
                         for self.text in self.listen():
                             if self.text != '':
